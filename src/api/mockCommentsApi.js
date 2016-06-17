@@ -1,5 +1,5 @@
 import delay from './delay';
-import comments from './comments';
+import comments from './comments.js';
 
 
 class CommentsApi {

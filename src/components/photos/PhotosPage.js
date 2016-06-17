@@ -12,15 +12,15 @@ class PhotoFrame extends React.Component {
 
     this.state = {
       posts: [...props.posts],
-      comments: Object.assign({}, props.comments)
+      comments: [...props.comments]
     };
 
     this.incrementLikes = this.incrementLikes.bind(this);
   }
 
-  incrementLikes(event, post, i) {
+  incrementLikes(event, post, i, id) {
     event.preventDefault();
-    this.props.actions.incrementLikes(post, i)
+    this.props.actions.incrementLikes(post, i, id)
       .then(() => {
         console.log('Liked');
       })
@@ -30,24 +30,23 @@ class PhotoFrame extends React.Component {
   }
 
   render () {
-    let posts = this.state.posts;
+    let posts = this.props.posts;
     let comments = this.props.comments;
     return (
       <div className="main">
-      {
-        this.props.posts.map((post, i) => {
-          for(let key in comments) {
-            if(key === post.code) {
-              return <PostDisplay
-                      key={i}
-                      {...post}
-                      commentLength={comments[key]} incrementLikes={this.incrementLikes}
-                      i={i} post={post}
-                    />;
-            }
-          }
-        })
-      }
+       {
+          posts.map((post, i) => {
+             return <PostDisplay
+                     key={i}
+                     {...post}
+                     comments={comments}
+                     incrementLikes={this.incrementLikes}
+                     comLength={comments.filter(comment => comment.postId === post.id).length}
+                     i={i}
+                     post={post}
+                   />;
+          })
+       }
       </div>
     );
   }
@@ -55,13 +54,17 @@ class PhotoFrame extends React.Component {
 
 PhotoFrame.propTypes = {
   posts: PropTypes.array.isRequired,
-  comments: PropTypes.object.isRequired
+  comments: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
+  let comments = [];
+  if (state.comments.length > 0) {
+    comments = state.comments;
+  }
   return {
     posts: state.posts,
-    comments: state.comments
+    comments: comments
   };
 }
 

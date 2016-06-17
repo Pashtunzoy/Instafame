@@ -12,7 +12,7 @@ class Post extends React.Component {
     super(props, context);
 
     this.state = {
-      comments: props.comments,
+      comments: [...props.comments],
       post: Object.assign({}, props.post),
       username: '',
       comment: ''
@@ -23,12 +23,12 @@ class Post extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.post.code !== nextProps.post.code && nextProps.comments.length > 0) {
+    // if (this.state.post.code !== nextProps.post.code || nextProps.comments.length > 0) {
       this.setState({
         comments: [...nextProps.comments],
         post: Object.assign({}, nextProps.post
       )});
-    }
+    // }
   }
 
   onInputChange() {
@@ -38,7 +38,7 @@ class Post extends React.Component {
   }
 
   createComment() {
-    this.props.actions.createComment(this.state.username, this.state.comment, this.props.keyCode).then(() => {
+    this.props.actions.createComment(this.state.username, this.state.comment, this.props.postId).then(() => {
       console.log('Comment saved');
     }).catch((err) => {
       console.log(`There was an error in createComment saving action: ${err}`);
@@ -53,8 +53,8 @@ class Post extends React.Component {
             <figcaption>{this.state.post.caption}</figcaption>
             <div className="all-comments">
               {
-                this.state.comments.map((comment) => {
-                  return <Comment {...comment} key={comment.user}/>;
+                this.state.comments.map((comment, i) => {
+                  return <Comment {...comment} key={i}/>;
                 })
               }
             </div>
@@ -87,38 +87,38 @@ Post.propTypes = {
   comments: PropTypes.array.isRequired,
   actions: PropTypes.object.isRequired
 };
-function getPostByCode(posts, code) {
-  const post = posts.filter(post => post.code == code);
+function getPostByCode(posts, id) {
+  const post = posts.filter(post => post.id == id);
   if (post) return post[0];
   return null;
 }
 
-function getCommentsByCode(comments, code) {
-  for (let key in comments) {
-    if (key === code) {
-      return [comments[key], key];
+function getCommentsById(comments, id) {
+  let arr = [];
+  comments.map(comment => {
+    if (comment.postId === parseInt(id)) {
+      arr.push(comment);
     }
-  }
+  });
+  return arr;
 }
 
 function mapStateToProps(state, ownProps) {
-  const code = ownProps.params.id;
+  const id = ownProps.params.id;
   let post = {code: '', caption: '', likes: '', id: '', display_src: ''};
-  if (code && state.posts.length > 0) {
-    post = getPostByCode(state.posts, code);
+  if (id && state.posts.length > 0) {
+    post = getPostByCode(state.posts, id);
   }
 
   let comments = [];
-  let keyCode = [];
-  if (state.comments  && Object.keys(state.comments).length > 0) {
-      comments = getCommentsByCode(state.comments, code)[0];
-      keyCode = getCommentsByCode(state.comments, code)[1];
+  if (state.comments.length > 0) {
+    comments = getCommentsById(state.comments, id);
   }
-  console.log(state.comments);
+
   return {
     post: post,
     comments: comments,
-    keyCode: keyCode
+    postId: id
   };
 }
 

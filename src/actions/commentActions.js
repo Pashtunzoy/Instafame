@@ -6,28 +6,28 @@ export function loadCommentsSuccess(comments) {
   return { type: types.LOAD_COMMENTS_SUCCESS, comments};
 }
 
-export function createCommentSuccess(username, comment, keyCode) {
-  return { type: types.CREATE_COMMENT_SUCCESS, username, comment, keyCode};
+export function createCommentSuccess(username, comment, postId) {
+  return { type: types.CREATE_COMMENT_SUCCESS, username, comment, postId};
 }
 
-export function createComment(username, comment, keyCode) {
+export function createComment(username, comment, postId) {
   return(dispatch, getState) => {
-    dispatch(createCommentSuccess(username, comment, keyCode));
-    console.log(getState());
-    // return fetch(`http://localhost:3001/${keyCode}`, {
-    //   method: 'POST',
-    //   headers: new Headers({
-    //    'Content-Type': 'text'
-    //   }),
-    //   data: JSON.stringify(getState().comments[keyCode])
-    // })
-    // .then(res => res.json())
-    // .then(data => {
-    //   console.log(data);
-    // })
-    // .catch(err =>
-    //   console.log(`There was error while creating Comment: ${err}`)
-    // );
+    dispatch(createCommentSuccess(username, comment, postId));
+    let comArr = getState().comments[getState().comments.length - 1];
+    return fetch(`http://localhost:3001/comments`, {
+      method: 'POST',
+      headers: new Headers({
+       'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify(comArr)
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+    })
+    .catch(err =>
+      console.log(`There was an error while creating a comment: ${err}`)
+    );
   }
 }
 
@@ -44,7 +44,7 @@ export function createComment(username, comment, keyCode) {
 
 export function loadComments(dispatch) {
   return (dispatch, getState) => {
-    return fetch(`http://localhost:3001/db`)
+    return fetch(`http://localhost:3001/comments`)
       .then(res => {
         return res.json()
       })
@@ -64,7 +64,6 @@ export function loadComments(dispatch) {
 //   return function (dispatch, getState) {
 //     return CommentsApi.getAllComments().then(comments =>{
 //       dispatch(loadCommentsSuccess(comments));
-//       console.log(getState());
 //     }).catch((err) => {
 //       throw(err);
 //     });

@@ -12,10 +12,9 @@ export function incrementLikeSuccess(i) {
 
 export function loadPosts() {
   return function (dispatch) {
-    return fetch(`http://localhost:3000/db`).then(response => {
+    return fetch(`http://localhost:3000/posts`).then(response => {
       return response.json();
     }).then(posts => {
-      console.log(posts);
       dispatch(loadPostsSuccess(posts));
     }).catch((err) => {
       throw(err);
@@ -24,10 +23,10 @@ export function loadPosts() {
 }
 
 
-export function incrementLikes(post, i) {
+export function incrementLikes(post, i, id) {
     return (dispatch, getState) => {
         dispatch(incrementLikeSuccess(i));
-        return fetch(`http://localhost:3000/${i}`, {
+        return fetch(`http://localhost:3000/posts/${id}`, {
             method: 'PUT',
             headers: new Headers({
              'Content-Type': 'application/json'
