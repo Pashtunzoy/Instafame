@@ -116,6 +116,16 @@ body {
   .user-name {
     font-weight: 800;
   }
+  .delete-comment-show {
+    display: block;
+    float: right;
+    &:hover {
+      // display: block;
+    }
+  }
+  .delete-comment-hide {
+    display: none;
+  }
   .input-area {
     display: flex;
     flex-wrap: wrap;

@@ -20,6 +20,7 @@ class Post extends React.Component {
 
     this.onInputChange = this.onInputChange.bind(this);
     this.createComment = this.createComment.bind(this);
+    this.deleteComment = this.deleteComment.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -38,11 +39,21 @@ class Post extends React.Component {
   }
 
   createComment() {
-    this.props.actions.createComment(this.state.username, this.state.comment, this.props.postId).then(() => {
+    let user = this.state.username
+    let comment = (this.state.comment).toString();
+    this.props.actions.createComment(user, comment, this.props.postId).then(() => {
       console.log('Comment saved');
     }).catch((err) => {
       console.log(`There was an error in createComment saving action: ${err}`);
     })
+  }
+
+  deleteComment(id, comment, user, postId) {
+    this.props.actions.deleteComment(id, comment, user, postId).then(() => {
+      console.log('Comment deleted');
+    }).catch((err) => {
+      console.log('There was an error while deleting comment: ', err);
+    });
   }
   render () {
     return (
@@ -54,7 +65,7 @@ class Post extends React.Component {
             <div className="all-comments">
               {
                 this.state.comments.map((comment, i) => {
-                  return <Comment {...comment} key={i}/>;
+                  return <Comment {...comment} key={i} deleteComment={this.deleteComment}/>;
                 })
               }
             </div>

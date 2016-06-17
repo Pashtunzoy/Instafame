@@ -15,8 +15,9 @@ export default function postsReducer(state = initialState.comments, action) {
     case types.LOAD_COMMENTS_SUCCESS:
       return action.comments;
     case types.CREATE_COMMENT_SUCCESS:
-      // console.log([...state, postComment(state, action)]);
       return postComment(state, action)
+    case types.DELETE_COMMENT_SUCCESS:
+      return state.filter((comment) => comment.id !== action.id);
     default:
       return state;
   }
