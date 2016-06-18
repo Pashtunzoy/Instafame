@@ -10,7 +10,7 @@ const PostDisplay = ({code, display_src, caption, id, likes,comLength, comments,
         <figcaption>{caption}</figcaption>
       </figure>
       <div className="buttons">
-        <button className="comment-length">{comLength}</button>
+        <Link to={`/post/${id}`}><button className="comment-length">{comLength}</button></Link>
         <button className="likes" onClick={(e) => incrementLikes(e, post, i, id)}>{likes}</button>
       </div>
     </div>

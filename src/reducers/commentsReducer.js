@@ -3,7 +3,6 @@ import initialState from './initialState';
 
 function postComment(state = [], action) {
   return [...state, {
-    id: state.length + 1,
     text: action.comment,
     user: action.username,
     postId: parseInt(action.postId)
