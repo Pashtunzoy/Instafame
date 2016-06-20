@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import App from './components/App';
 import { Router, browserHistory } from 'react-router';
 import routes from './routes';
+// import api from './middleware/api';
 import { loadPosts } from './actions/postActions';
 import { loadComments } from './actions/commentActions';
 import './styles/styles.scss';
