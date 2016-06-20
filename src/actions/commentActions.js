@@ -42,7 +42,7 @@ export function deleteComment(id, comment, user, postId) {
       method: 'DELETE',
       headers: new Headers({
        'Content-Type': 'application/json'
-      }),
+      })
     })
     .then()
     .then(() => {

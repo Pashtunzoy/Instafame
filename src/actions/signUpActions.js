@@ -2,36 +2,36 @@ import * as types from './actionTypes';
 
 
 
-export function requestLogin(creds) {
+export function signUpRequest(creds) {
   return {
-    type: types.LOGIN_REQUEST,
+    type: types.SIGNUP_REQUEST,
     isFetching: true,
-    isAuthenticated: false,
+    signedUp: false,
     creds
   };
 }
 
-export function receiveLogin(user) {
+export function signUpSuccessfull() {
   return {
-    type: types.LOGIN_SUCCESS,
+    type: types.SIGNUP_SUCCESS,
     isFetching: false,
-    isAuthenticated: true,
-    id_token: user.token
+    signedUp: true,
+    errorMessage: ''
   };
 }
 
-export function loginError(message) {
+export function signUpFailer(message) {
   return {
-    type: types.LOGIN_FAILURE,
+    type: types.SIGNUP_FAILURE,
     isFetching: false,
-    isAuthenticated: false,
+    signedUp: false,
     message
   };
 }
 
 
 
-export function loginUser(creds) {
+export function signUpUser(creds) {
 
   let config = {
     mode: 'cors',
@@ -42,19 +42,19 @@ export function loginUser(creds) {
 
 
   return (dispatch, getState) => {
-    dispatch(requestLogin(creds));
+    dispatch(signUpRequest(creds));
     console.log(getState());
-    return fetch('http://localhost:4000/api/authenticate', config)
+    return fetch('http://localhost:4000/api/register', config)
     .then(response =>{
       return response.json()
       .then(user => ({ user, response }))}
     ).then(({ user, response }) =>  {
       if(!user.success) {
-        dispatch(loginError(user.message));
+        dispatch(signUpFailer(user.message));
         return Promise.reject(user);
       } else {
-        localStorage.setItem('id_token', user.token);
-        dispatch(receiveLogin(user));
+        // localStorage.setItem('id_token', user.token);
+        dispatch(signUpSuccessfull());
       }
     });
   };

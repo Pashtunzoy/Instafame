@@ -13,6 +13,12 @@ class Header extends React.Component {
     return (
       <header>
         <Link to="/"><h5>Home</h5></Link>
+          {isAuthenticated &&
+            <Link to="/profile">Profile</Link>
+          }
+          {!isAuthenticated &&
+            <Link to="/signup">SingUp</Link>
+          }
           <Navbar
             isAuthenticated={isAuthenticated}
             errorMessage={errorMessage}

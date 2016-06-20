@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 import Login from './Login';
 import Logout from './Logout';
 import * as loginActions from '../actions/loginActions';
@@ -10,7 +11,6 @@ class Navbar extends React.Component {
     return (
       <nav className="navbar navbar-default">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">Instafame App</a>
           <div className="navbar-form">
 
             {!isAuthenticated &&
@@ -21,7 +21,9 @@ class Navbar extends React.Component {
             }
 
             {isAuthenticated &&
-              <Logout onLogoutClick={() => dispatch(logoutActions.logoutUser())} />
+              <div>
+                <Logout onLogoutClick={() => dispatch(logoutActions.logoutUser())} />
+              </div>
             }
 
           </div>
