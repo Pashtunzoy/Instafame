@@ -20,11 +20,7 @@ class Navbar extends React.Component {
               />
             }
 
-            {isAuthenticated &&
-              <div>
-                <Logout onLogoutClick={() => dispatch(logoutActions.logoutUser())} />
-              </div>
-            }
+            
 
           </div>
         </div>

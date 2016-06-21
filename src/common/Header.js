@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as loginActions from '../actions/loginActions';
+import * as logoutActions from '../actions/logoutActions';
 import { Link } from 'react-router';
 import Login from '../components/Login';
 import Navbar from '../components/Navbar';
 import Profile from '../components/Profile';
-
 
 class Header extends React.Component {
   render() {
@@ -14,20 +14,30 @@ class Header extends React.Component {
       <header>
         <Link to="/"><h5>Home</h5></Link>
           {isAuthenticated &&
-            <Link to="/profile">Profile</Link>
+            <div>
+              <Link to="/profile">
+                <h5>Profile</h5>
+              </Link>
+              <Link to="/auth" onClick={() => dispatch(logoutActions.logoutUser())}>
+                <h5>SignOut</h5>
+              </Link>
+            </div>
           }
           {!isAuthenticated &&
-            <Link to="/signup">SingUp</Link>
+            <Link to="/auth">
+              <h5>SignUp/Login</h5>
+            </Link>
           }
-          <Navbar
-            isAuthenticated={isAuthenticated}
-            errorMessage={errorMessage}
-            dispatch={dispatch}
-          />
       </header>
     );
   }
 }
+
+// <Navbar
+//   isAuthenticated={isAuthenticated}
+//   errorMessage={errorMessage}
+//   dispatch={dispatch}
+// />
 
 
 Header.propTypes = {
